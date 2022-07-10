@@ -57,4 +57,18 @@ CREATE TABLE paquete(
     FOREIGN KEY (fk_destinatario) REFERENCES destinatario (pk_destinatario),
     FOREIGN KEY (fk_camionero) REFERENCES camionero (dni),
     FOREIGN KEY (fk_provincia) REFERENCES provincia (codigo_provincia)
+);
+
+--Tabla rol
+CREATE TABLE rol(
+    pk_role INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    rol VARCHAR (15) NOT NULL
+);
+
+--Tabla usuario
+CREATE TABLE usuario(
+    usuario VARCHAR(10) PRIMARY KEY NOT NULL,
+    contrasenia VARCHAR(15),
+    fk_role INT NOT NULL,
+    FOREIGN KEY (fk_role) REFERENCES rol (pk_role)
 )
