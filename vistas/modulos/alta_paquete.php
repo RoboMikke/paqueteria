@@ -1,7 +1,8 @@
-<div class="jumbotron jumbotron-fluid">
+<div class="jumbotron jumbotron-fluid" style="background-color: rgb(213, 57, 0); text-align: center; color: papayawhip;">
   <div class="container">
-    <h1 class="display-4">Alta Paquete</h1>
-    <p class="lead">Por favor llene los campos solicitados</p>
+    <h1 class="display-4"><b><i class="fa-solid fa-file-pen"></i> Alta de paquetes</b></h1>
+    <hr>
+    <p class="lead"><b>Por favor llene los campos solicitados</p>
   </div>
 </div>
 <br><br>
@@ -9,12 +10,12 @@
     <!-- codigo paquete -->
     <div class="mb-3">
         <label for="codigo_paquete" class="form-label">Código:</label>
-        <input type="text" class="form-control" id="codigo_paquete" name="codigo_paquete" required>
+        <input type="text" class="form-control" id="codigo_paquete" name="codigo_paquete" maxlength="5" minlength="5" pattern="[0-9]*" title="Escriba solo 5 números" placeholder="13124" required>
     </div>
     <!-- descripcion -->
      <div class="mb-3">
-        <label for="descripcion" class="form-label">Nombre:</label>
-        <input type="text" class="form-control" id="descripcion" name="descripcion" required>
+        <label for="descripcion" class="form-label">Descripción:</label>
+        <input type="text" class="form-control" id="descripcion" name="descripcion"  placeholder="Kit de desarmadores" required>
     </div>
     <!-- destinatario -->
     <div class="mb-3">
@@ -25,7 +26,7 @@
             $consulta = Controlador::consultaDestinatarioControlador();
             foreach($consulta as $datos => $valores)
             {
-                echo '<option value="'.$valores["pk_destinatario"].'">'.$valores["destinatario"].$valores["direccion_destinatario"].'</option>';
+                echo '<option value="'.$valores["pk_destinatario"].'">'.$valores["destinatario"].'</option>';
             }
         ?>
     </select>
@@ -59,11 +60,10 @@
     </select>
     </div>
     <br><br>
-    <!--boton-->
+    <!--Botón-->
     <div class="d-grid gap-2 col-6 mx-auto">
-        <button class="btn btn-primary" type="submit">Guardar</button>
-    </div>
-    <br><br>
+        <button style="background-color: rgb(213, 57, 0); color: aliceblue;; font-size: 20px; font-weight: bold;" class="btn btn-warning" type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+    </div><br><br>
 </form>
 <?php
     $registro = new Controlador(); 
