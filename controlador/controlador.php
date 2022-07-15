@@ -88,6 +88,7 @@ class Controlador
 	{
 		if(isset($_POST['matricula']))
 		{
+
 			$tabla = "camion";
 
 			$datosControlador = array("matricula"=>$_POST['matricula'],"modelo"=>$_POST['modelo'],
@@ -100,12 +101,16 @@ class Controlador
 				?>
 				<script>
 					Swal.fire({
-						  position: 'top-end',
-						  icon: 'success',
-						  title: 'Se guardaron los datos correctamente',
-						  showConfirmButton: false,
-						  timer: 1500
-						})
+                                title: 'Datos guardados correctamente',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                    /* Read more about isConfirmed, isDenied below */
+                                    if (result.isConfirmed) {
+                                        window.location="index.php?opcion=mostrar_camion";
+                                    } else if (result.isDenied) {
+
+                                    }
+                                })
 				</script>
 				<?php
 			}
@@ -115,8 +120,8 @@ class Controlador
 				<script>
 					Swal.fire({
 					  icon: 'error',
-					  title: 'No se guardaron los datos',
-					  text: 'Something went wrong!'
+					  title: 'Oops...',
+					  text: 'Ha ocurrido un error al guardar'
 					})
 				</script>
 				<?php
@@ -146,6 +151,7 @@ class Controlador
 	#--------------------------------
 	static public function registroCamioneroControlador()
 	{
+
 		if(isset($_POST['dni']))
 		{
 			$tabla = "camionero";
@@ -165,20 +171,25 @@ class Controlador
 			//$datosControlador = array("salario"=>$_POST['salario']);
 			//$datosControlador = array("fk_poblacion"=>$_POST['fk_poblacion']);
 
-			$respuesta = Modelo::registroCamioneroModelo($dni, $nombre, $primer_apellido, $segundo_apellido,
-			 $telefono, $salario, $fk_poblacion, $tabla);
+
+			$respuesta = Modelo::registroCamioneroModelo($dni, $nombre, $primer_apellido, $segundo_apellido, $telefono, $salario, $fk_poblacion, $tabla);
+
 
 			if($respuesta == 'ok')
 			{
 				?>
 				<script>
 					Swal.fire({
-						  position: 'top-end',
-						  icon: 'success',
-						  title: 'Se guardaron los datos correctamente',
-						  showConfirmButton: false,
-						  timer: 1500
-						})
+                                title: 'Datos guardados correctamente',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                    /* Read more about isConfirmed, isDenied below */
+                                    if (result.isConfirmed) {
+                                        window.location="index.php?opcion=mostrar_camionero";
+                                    } else if (result.isDenied) {
+
+                                    }
+                                })
 				</script>
 				<?php
 			}
@@ -188,8 +199,8 @@ class Controlador
 				<script>
 					Swal.fire({
 					  icon: 'error',
-					  title: 'No se guardaron los datos',
-					  text: 'Something went wrong!'
+					  title: 'Oops...',
+					  text: 'Ha ocurrido un error al guardar'
 					})
 				</script>
 				<?php
@@ -201,7 +212,7 @@ class Controlador
 	#----------------------------------
 	static public function listadoCamioneroControlador()
 	{
-		$respuesta = Modelo::listadoCamioneroModelo("camionero");
+		$respuesta = Modelo::listadoCamioneroModelo("camionero","poblacion");
 
 		foreach ($respuesta as $renglon => $valores) 
 		{
@@ -222,11 +233,11 @@ class Controlador
 	#----------------------------------
 	static public function registroCamioneroCamionControlador()
 	{
-		if(isset($_POST['pk_camionero_camion']))
+		if(isset($_POST['fk_camionero']))
 		{
 			$tabla = "camionero_camion";
 
-			$datosControlador = array("pk_camionero_camion"=>$_POST['pk_camionero_camion'], "fk_camionero"=>$_POST['fk_camionero'], 
+			$datosControlador = array("fk_camionero"=>$_POST['fk_camionero'], 
 			"fk_camion"=>$_POST['fk_camion'], "fecha"=>$_POST['fecha']);
 
 			$respuesta = Modelo::registroCamioneroCamionModelo($datosControlador, $tabla);
@@ -236,12 +247,16 @@ class Controlador
 				?>
 				<script>
 					Swal.fire({
-						  position: 'top-end',
-						  icon: 'success',
-						  title: 'Se guardaron los datos correctamente',
-						  showConfirmButton: false,
-						  timer: 1500
-						})
+                                title: 'Datos guardados correctamente',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                    /* Read more about isConfirmed, isDenied below */
+                                    if (result.isConfirmed) {
+                                        window.location="index.php?opcion=mostrar_camionero_camion";
+                                    } else if (result.isDenied) {
+
+                                    }
+                                })
 				</script>
 				<?php
 			}
@@ -251,8 +266,8 @@ class Controlador
 				<script>
 					Swal.fire({
 					  icon: 'error',
-					  title: 'No se guardaron los datos',
-					  text: 'Something went wrong!'
+					  title: 'Oops...',
+					  text: 'Ha ocurrido un error al guardar'
 					})
 				</script>
 				<?php
@@ -264,16 +279,16 @@ class Controlador
 	#----------------------------------
 	static public function listadoCamioneroCamionControlador()
 	{
-		$respuesta = Modelo::listadoCamioneroCamionModelo("camionero_camion");
+		$respuesta = Modelo::listadoCamioneroCamionModelo("camionero","camionero_camion");
 
 		foreach ($respuesta as $renglon => $valores) 
 		{
 			?>
 				<tr>
 					<td><?php echo $valores['pk_camionero_camion']; ?></td>
-					<td><?php echo $valores['fk_camionero'];?></td>
-					<td><?php echo $valores['fk_camion']; ?></td>
-					<td><?php echo $valores['fecha']; ?></td>
+					<td><?php echo $valores['camionero'];?></td>
+					<td><?php echo $valores['Matricula de Camion']; ?></td>
+					<td><?php echo $valores['Fecha']; ?></td>
 				</tr>
 			<?php
 		}
@@ -282,11 +297,11 @@ class Controlador
 	#----------------------------------
 	static public function registroDestinatarioControlador()
 	{
-		if(isset($_POST['pk_destinatario']))
+		if(isset($_POST['destinatario']))
 		{
 			$tabla = "destinatario";
 
-			$datosControlador = array("pk_destinatario"=>$_POST['pk_destinatario'], "destinatario"=>$_POST['destinatario'],
+			$datosControlador = array("destinatario"=>$_POST['destinatario'],
 			"direccion_destinatario"=>$_POST['direccion_destinatario']);
 
 			$respuesta = Modelo::registroDestinatarioModelo($datosControlador, $tabla);
@@ -296,12 +311,16 @@ class Controlador
 				?>
 				<script>
 					Swal.fire({
-						  position: 'top-end',
-						  icon: 'success',
-						  title: 'Se guardaron los datos correctamente',
-						  showConfirmButton: false,
-						  timer: 1500
-						})
+                                title: 'Datos guardados correctamente',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                    /* Read more about isConfirmed, isDenied below */
+                                    if (result.isConfirmed) {
+                                        window.location="index.php?opcion=mostrar_destinatario";
+                                    } else if (result.isDenied) {
+
+                                    }
+                                })
 				</script>
 				<?php
 			}
@@ -311,8 +330,8 @@ class Controlador
 				<script>
 					Swal.fire({
 					  icon: 'error',
-					  title: 'No se guardaron los datos',
-					  text: 'Something went wrong!'
+					  title: 'Oops...',
+					  text: 'Ha ocurrido un error al guardar'
 					})
 				</script>
 				<?php
@@ -356,12 +375,16 @@ class Controlador
 				?>
 				<script>
 					Swal.fire({
-						  position: 'top-end',
-						  icon: 'success',
-						  title: 'Se guardaron los datos correctamente',
-						  showConfirmButton: false,
-						  timer: 1500
-						})
+                                title: 'Datos guardados correctamente',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                    /* Read more about isConfirmed, isDenied below */
+                                    if (result.isConfirmed) {
+                                        window.location="index.php?opcion=mostrar_provincia";
+                                    } else if (result.isDenied) {
+
+                                    }
+                                })
 				</script>
 				<?php
 			}
@@ -371,8 +394,8 @@ class Controlador
 				<script>
 					Swal.fire({
 					  icon: 'error',
-					  title: 'No se guardaron los datos',
-					  text: 'Something went wrong!'
+					  title: 'Oops...',
+					  text: 'Ha ocurrido un error al guardar'
 					})
 				</script>
 				<?php
@@ -401,11 +424,11 @@ class Controlador
 	#----------------------------------
 	static public function registroPoblacionControlador()
 	{
-		if(isset($_POST['pk_poblacion']))
+		if(isset($_POST['poblacion']))
 		{
 			$tabla = "poblacion";
 
-			$datosControlador = array("pk_poblacion"=>$_POST['pk_poblacion'], "poblacion"=>$_POST['poblacion']);
+			$datosControlador = array("poblacion"=>$_POST['poblacion']);
 
 			$respuesta = Modelo::registroPoblacionModelo($datosControlador, $tabla);
 
@@ -414,12 +437,16 @@ class Controlador
 				?>
 				<script>
 					Swal.fire({
-						  position: 'top-end',
-						  icon: 'success',
-						  title: 'Se guardaron los datos correctamente',
-						  showConfirmButton: false,
-						  timer: 1500
-						})
+                                title: 'Datos guardados correctamente',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                    /* Read more about isConfirmed, isDenied below */
+                                    if (result.isConfirmed) {
+                                        window.location="index.php?opcion=mostrar_poblacion";
+                                    } else if (result.isDenied) {
+
+                                    }
+                                })
 				</script>
 				<?php
 			}
@@ -429,8 +456,8 @@ class Controlador
 				<script>
 					Swal.fire({
 					  icon: 'error',
-					  title: 'No se guardaron los datos',
-					  text: 'Something went wrong!'
+					  title: 'Oops...',
+					  text: 'Ha ocurrido un error al guardar'
 					})
 				</script>
 				<?php
@@ -459,11 +486,11 @@ class Controlador
 	#----------------------------------
 	static public function registroRolControlador()
 	{
-		if(isset($_POST['pk_role']))
+		if(isset($_POST['rol']))
 		{
 			$tabla = "rol";
 
-			$datosControlador = array("pk_role"=>$_POST['pk_role'], "rol"=>$_POST['rol']);
+			$datosControlador = array("rol"=>$_POST['rol']);
 
 			$respuesta = Modelo::registroRolModelo($datosControlador, $tabla);
 
@@ -472,12 +499,16 @@ class Controlador
 				?>
 				<script>
 					Swal.fire({
-						  position: 'top-end',
-						  icon: 'success',
-						  title: 'Se guardaron los datos correctamente',
-						  showConfirmButton: false,
-						  timer: 1500
-						})
+                                title: 'Datos guardados correctamente',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                    /* Read more about isConfirmed, isDenied below */
+                                    if (result.isConfirmed) {
+                                        window.location="index.php?opcion=mostrar_rol";
+                                    } else if (result.isDenied) {
+
+                                    }
+                                })
 				</script>
 				<?php
 			}
@@ -487,8 +518,8 @@ class Controlador
 				<script>
 					Swal.fire({
 					  icon: 'error',
-					  title: 'No se guardaron los datos',
-					  text: 'Something went wrong!'
+					  title: 'Oops...',
+					  text: 'Ha ocurrido un error al guardar'
 					})
 				</script>
 				<?php
@@ -531,12 +562,16 @@ class Controlador
 				?>
 				<script>
 					Swal.fire({
-						  position: 'top-end',
-						  icon: 'success',
-						  title: 'Se guardaron los datos correctamente',
-						  showConfirmButton: false,
-						  timer: 1500
-						})
+                                title: 'Datos guardados correctamente',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                    /* Read more about isConfirmed, isDenied below */
+                                    if (result.isConfirmed) {
+                                        window.location="index.php?opcion=mostrar_usuario";
+                                    } else if (result.isDenied) {
+
+                                    }
+                                })
 				</script>
 				<?php
 			}
@@ -546,8 +581,8 @@ class Controlador
 				<script>
 					Swal.fire({
 					  icon: 'error',
-					  title: 'No se guardaron los datos',
-					  text: 'Something went wrong!'
+					  title: 'Oops...',
+					  text: 'Ha ocurrido un error al guardar'
 					})
 				</script>
 				<?php
@@ -560,14 +595,15 @@ class Controlador
 	#----------------------------------
 	static public function listadoUsuarioControlador()
 	{
-		$respuesta = Modelo::listadoUsuarioModelo("usuario");
+		$respuesta = Modelo::listadoUsuarioModelo("usuario","rol");
 
 		foreach ($respuesta as $renglon => $valores) 
 		{
 			?>
 				<tr>
 					<td><?php echo $valores['usuario']; ?></td>
-					<td><?php echo $valores['fk_role']; ?></td>
+					<td><?php echo $valores['contrasenia']; ?></td>
+					<td><?php echo $valores['rol']; ?></td>
 				</tr>
 			<?php
 		}
@@ -590,12 +626,16 @@ class Controlador
 				?>
 				<script>
 					Swal.fire({
-						  position: 'top-end',
-						  icon: 'success',
-						  title: 'Se guardaron los datos correctamente',
-						  showConfirmButton: false,
-						  timer: 1500
-						})
+                                title: 'Datos guardados correctamente',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                    /* Read more about isConfirmed, isDenied below */
+                                    if (result.isConfirmed) {
+                                        window.location="index.php?opcion=mostrar_paquete";
+                                    } else if (result.isDenied) {
+
+                                    }
+                                })
 				</script>
 				<?php
 			}
@@ -605,8 +645,8 @@ class Controlador
 				<script>
 					Swal.fire({
 					  icon: 'error',
-					  title: 'No se guardaron los datos',
-					  text: 'Something went wrong!'
+					  title: 'Oops...',
+					  text: 'Ha ocurrido un error al guardar'
 					})
 				</script>
 				<?php
@@ -619,7 +659,7 @@ class Controlador
 	#----------------------------------
 	static public function listadoPaqueteControlador()
 	{
-		$respuesta = Modelo::listadoPaqueteModelo("paquete");
+		$respuesta = Modelo::listadoPaqueteModelo();
 
 		foreach ($respuesta as $renglon => $valores) 
 		{
@@ -627,9 +667,9 @@ class Controlador
 				<tr>
 					<td><?php echo $valores['codigo_paquete']; ?></td>
 					<td><?php echo $valores['descripcion']; ?></td>
-					<td><?php echo $valores['fk_destinatario']; ?></td>
-					<td><?php echo $valores['fk_camionero']; ?></td>
-					<td><?php echo $valores['fk_provincia']; ?></td>
+					<td><?php echo $valores['destinatario']; ?></td>
+					<td><?php echo $valores['camionero']; ?></td>
+					<td><?php echo $valores['provincia']; ?></td>
 				</tr>
 			<?php
 		}
