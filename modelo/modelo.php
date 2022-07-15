@@ -98,20 +98,20 @@ class Modelo extends Conexion
     }
     #registro camionero
     #----------------------------------------
-    static public function registroCamioneroModelo($datosModelo, $tabla)
+    static public function registroCamioneroModelo($dni, $nombre, $primer_apellido, $segundo_apellido, $telefono, $salario, $fk_poblacion, $tabla)
     {
 
         $consulta = Conexion::conectar()->prepare("INSERT INTO $tabla (dni, nombre, primer_apellido, segundo_apellido,
         telefono, salario, fk_poblacion) 
-        VALUES (:dni, :nombre, :primer_apellido, :segundo_apellido, :telefono, :salario, :fk_poblacion)");
+        VALUES ('$dni', '$nombre', '$primer_apellido', '$segundo_apellido', '$telefono', '$salario', '$fk_poblacion')");
 
-        $consulta->bindParam(":dni", $datosModelo["dni"], PDO::PARAM_STR);
+        /*$consulta->bindParam(":dni", $datosModelo["dni"], PDO::PARAM_STR);
         $consulta->bindParam(":nombre", $datosModelo["nombre"], PDO::PARAM_STR);
         $consulta->bindParam(":primer_apellido", $datosModelo["primer_apellido"], PDO::PARAM_STR);
         $consulta->bindParam(":segundo_apellido", $datosModelo["segundo_apellido"], PDO::PARAM_STR);
         $consulta->bindParam(":telefono", $datosModelo["telefono"], PDO::PARAM_STR);
         $consulta->bindParam(":salario", $datosModelo["salario"], PDO::PARAM_STR);
-        $consulta->bindParam(":fk_poblacion", $datosModelo["fk_poblacion"], PDO::PARAM_STR);
+        $consulta->bindParam(":fk_poblacion", $datosModelo["fk_poblacion"], PDO::PARAM_STR);*/
 
         if($consulta->execute()) 
         {
@@ -125,10 +125,11 @@ class Modelo extends Conexion
         $consulta->close();
     }
     #-------------------------------------------------------
-    static public function listadoCamioneroModelo($tabla1)
+    static public function listadoCamioneroModelo($tabla1, $tabla2)
     {
-        $consulta = Conexion::conectar()->prepare("SELECT dni, nombre, primer_apellido, segundo_apellido, telefono, salario, fk_poblacion
-        FROM $tabla1");
+        $consulta = Conexion::conectar()->prepare("SELECT dni, nombre, primer_apellido, segundo_apellido, telefono, salario, po.poblacion AS 'fk_poblacion'
+        FROM camionero ca, poblacion po
+        WHERE ca.fk_poblacion = po.pk_poblacion");
         $consulta -> execute();
         return $consulta->fetchAll();
         $consulta->close();
@@ -138,10 +139,9 @@ class Modelo extends Conexion
     static public function registroCamioneroCamionModelo($datosModelo, $tabla)
     {
 
-        $consulta = Conexion::conectar()->prepare("INSERT INTO $tabla (pk_camionero_camion, fk_camionero, fk_camion, fecha) 
-        VALUES (:pk_camionero_camion, :fk_camionero, :fk_camion, :fecha)");
+        $consulta = Conexion::conectar()->prepare("INSERT INTO $tabla (fk_camionero, fk_camion, fecha) 
+        VALUES (:fk_camionero, :fk_camion, :fecha)");
 
-        $consulta->bindParam(":pk_camionero_camion", $datosModelo["pk_camionero_camion"], PDO::PARAM_STR);
         $consulta->bindParam(":fk_camionero", $datosModelo["fk_camionero"], PDO::PARAM_STR);
         $consulta->bindParam(":fk_camion", $datosModelo["fk_camion"], PDO::PARAM_STR);
         $consulta->bindParam(":fecha", $datosModelo["fecha"], PDO::PARAM_STR);
@@ -158,10 +158,11 @@ class Modelo extends Conexion
         $consulta->close();
     }
     #----------------------------------------
-    static public function listadoCamioneroCamionModelo($tabla1)
+    static public function listadoCamioneroCamionModelo($tabla1, $tabla2)
     {
-        $consulta = Conexion::conectar()->prepare("SELECT pk_camionero_camion, fk_camionero, fk_camion, fecha
-        FROM $tabla1");
+        $consulta = Conexion::conectar()->prepare("SELECT cc.pk_camionero_camion, CONCAT (co.nombre, ' ', co.primer_apellido) AS 'camionero', cc.fk_camion AS 'Matricula de Camion',cc.fecha AS 'Fecha'
+        FROM camionero co, camionero_camion cc
+        WHERE cc.fk_camionero = co.dni");
         $consulta -> execute();
         return $consulta->fetchAll();
         $consulta->close();
@@ -172,10 +173,9 @@ class Modelo extends Conexion
     static public function registroDestinatarioModelo($datosModelo, $tabla)
     {
 
-        $consulta = Conexion::conectar()->prepare("INSERT INTO $tabla (pk_destinatario, destinatario, direccion_destinatario) 
-        VALUES (:pk_destinatario, :destinatario, :direccion_destinatario)");
+        $consulta = Conexion::conectar()->prepare("INSERT INTO $tabla (destinatario, direccion_destinatario) 
+        VALUES (:destinatario, :direccion_destinatario)");
 
-        $consulta->bindParam(":pk_destinatario", $datosModelo["pk_destinatario"], PDO::PARAM_STR);
         $consulta->bindParam(":destinatario", $datosModelo["destinatario"], PDO::PARAM_STR);
         $consulta->bindParam(":direccion_destinatario", $datosModelo["direccion_destinatario"], PDO::PARAM_STR);
 
@@ -206,7 +206,7 @@ class Modelo extends Conexion
     {
 
         $consulta = Conexion::conectar()->prepare("INSERT INTO $tabla (codigo_provincia, nombre_provincia) 
-        VALUES (:codigo_provincia, :nombre_provincia)");
+        VALUES (:codigo_provincia,:nombre_provincia)");
 
         $consulta->bindParam(":codigo_provincia", $datosModelo["codigo_provincia"], PDO::PARAM_STR);
         $consulta->bindParam(":nombre_provincia", $datosModelo["nombre_provincia"], PDO::PARAM_STR);
@@ -237,10 +237,9 @@ class Modelo extends Conexion
     static public function registroPoblacionModelo($datosModelo, $tabla)
     {
 
-        $consulta = Conexion::conectar()->prepare("INSERT INTO $tabla (pk_poblacion, poblacion) 
-        VALUES (:pk_poblacion, :poblacion)");
+        $consulta = Conexion::conectar()->prepare("INSERT INTO $tabla (poblacion) 
+        VALUES (:poblacion)");
 
-        $consulta->bindParam(":pk_poblacion", $datosModelo["pk_poblacion"], PDO::PARAM_STR);
         $consulta->bindParam(":poblacion", $datosModelo["poblacion"], PDO::PARAM_STR);
 
         if($consulta->execute()) 
@@ -269,10 +268,9 @@ class Modelo extends Conexion
     static public function registroRolModelo($datosModelo, $tabla)
     {
 
-        $consulta = Conexion::conectar()->prepare("INSERT INTO $tabla (pk_role, rol) 
-        VALUES (:pk_role, :rol)");
+        $consulta = Conexion::conectar()->prepare("INSERT INTO $tabla (rol) 
+        VALUES (:rol)");
 
-        $consulta->bindParam(":pk_role", $datosModelo["pk_role"], PDO::PARAM_STR);
         $consulta->bindParam(":rol", $datosModelo["rol"], PDO::PARAM_STR);
 
         if($consulta->execute()) 
@@ -302,7 +300,7 @@ class Modelo extends Conexion
     {
 
         $consulta = Conexion::conectar()->prepare("INSERT INTO $tabla (usuario, contrasenia, fk_role) 
-        VALUES (:usuario, :contrasenia, :fk_role)");
+        VALUES (:usuario, MD5(:contrasenia), :fk_role)");
 
         $consulta->bindParam(":usuario", $datosModelo["usuario"], PDO::PARAM_STR);
         $consulta->bindParam(":contrasenia", $datosModelo["contrasenia"], PDO::PARAM_STR);
@@ -320,10 +318,11 @@ class Modelo extends Conexion
         $consulta->close();
     }
     #-------------------------------------------------------
-    static public function listadoUsuarioModelo($tabla1)
+    static public function listadoUsuarioModelo($tabla1, $tabla2)
     {
-        $consulta = Conexion::conectar()->prepare("SELECT usuario, fk_role
-        FROM $tabla1");
+        $consulta = Conexion::conectar()->prepare("SELECT usuario, contrasenia, rol
+        FROM usuario, rol
+        WHERE usuario.fk_role = rol.pk_role");
 
         $consulta -> execute();
         return $consulta->fetchAll();
@@ -331,10 +330,10 @@ class Modelo extends Conexion
     }
     #registro paquete
     #----------------------------------------
-    static public function registroPaqueteModelo($datosModelo, $tabla)
+    static public function registroPaqueteModelo($datosModelo, $tabla1)
     {
 
-        $consulta = Conexion::conectar()->prepare("INSERT INTO $tabla (codigo_paquete, descripcion, fk_destinatario,
+        $consulta = Conexion::conectar()->prepare("INSERT INTO $tabla1 (codigo_paquete, descripcion, fk_destinatario,
         fk_camionero, fk_provincia) 
         VALUES (:codigo_paquete, :descripcion, :fk_destinatario, :fk_camionero, :fk_provincia)");
 
@@ -356,10 +355,11 @@ class Modelo extends Conexion
         $consulta->close();
     }
     #-------------------------------------------------------
-    static public function listadoPaqueteModelo($tabla1)
+    static public function listadoPaqueteModelo()
     {
-        $consulta = Conexion::conectar()->prepare("SELECT codigo_paquete, descripcion, fk_destinatario, fk_camionero, fk_provincia
-        FROM $tabla1");
+        $consulta = Conexion::conectar()->prepare("SELECT codigo_paquete, descripcion, des.destinatario AS 'destinatario', CONCAT(cam.nombre, ' ', cam.primer_apellido) AS 'camionero', pro.nombre_provincia AS 'provincia'
+        FROM paquete pq, destinatario des, camionero cam, provincia pro
+        WHERE pq.fk_destinatario = des.pk_destinatario AND pq.fk_camionero = cam.dni AND pq.fk_provincia = pro.codigo_provincia");
 
         $consulta -> execute();
         return $consulta->fetchAll();
