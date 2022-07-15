@@ -1,17 +1,10 @@
-<div class="jumbotron">
-<h1 class="display-4">App paquetería</h1>
-  <hr class="my-4">
-  <p></p><br>
-<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-        <img src="vistas/img/paqueteria.jpg" class="d-block w-100" alt="..." width="200" height="500">
-        </div>
-    </div>
-    </div>
+<div class="jumbotron" style="background-image: url(vistas/img/paqueteria.jpg);">
+  <br><br><br><br><br><br>
+  <div style="background-color: rgba(192, 56, 6, 0.844);">
+    <h1 class="display-4" style="text-align: center; color: aliceblue;">-----------------------</h1>
+    <h1 class="display-4" style="text-align: center; color: aliceblue;"><b>PAQUETERÍA ESPAÑA</b></h1>
+    <h1 class="display-4" style="text-align: center; color: aliceblue;">-----------------------</h1>
+  </div>
+  <br><br><br><br><br><br>
 </div>
 <br><br>
-
-
-
-
